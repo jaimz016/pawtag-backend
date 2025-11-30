@@ -40,16 +40,9 @@ def init_firebase():
         creds_dict = json.loads(firebase_creds_json)
         print("✅ JSON parsing successful")
         
-        print("📄 Creating temporary credential file...")
-        # Create a temporary file with proper naming
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as temp_file:
-            json.dump(creds_dict, temp_file)
-            temp_path = temp_file.name
-        print(f"📄 Temporary file created at: {temp_path}")
-        
-        print("🔑 Initializing Firebase credentials...")
-        # Initialize Firebase with the temp file path
-        cred = credentials.Certificate(temp_path)
+        print("🔑 Initializing Firebase credentials with dictionary...")
+        # Initialize Firebase directly with the dictionary
+        cred = credentials.Certificate(creds_dict)
         print("✅ Firebase credentials created")
         
         print("🔥 Initializing Firebase app...")
@@ -63,11 +56,6 @@ def init_firebase():
         bucket = storage.bucket()
         print(f"✅ Storage bucket obtained: {bucket.name}")
         
-        print("🧹 Cleaning up temporary file...")
-        # Clean up the temp file
-        os.unlink(temp_path)
-        print("✅ Temporary file cleaned up")
-        
         print("🎉 Firebase initialized successfully!")
         return bucket
         
@@ -80,16 +68,6 @@ def init_firebase():
         import traceback
         print(f"📋 Stack trace: {traceback.format_exc()}")
         raise RuntimeError(f"Firebase initialization failed: {e}")
-
-# Initialize Firebase
-print("🔄 Attempting Firebase initialization...")
-try:
-    bucket = init_firebase()
-    print("✅ Firebase initialization completed successfully")
-except Exception as e:
-    print(f"❌ Firebase initialization failed: {e}")
-    # Don't raise the exception here, let the app start so we can see other errors
-    bucket = None
 
 # ---------------------------
 # ORB setup
