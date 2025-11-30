@@ -461,3 +461,11 @@ async def evaluate(threshold: float = 0.3):
 
 print("🎉 Application startup complete!")
 print("📡 Server is ready to handle requests")
+
+# Add this at the VERY END of your server.py file
+import os
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
